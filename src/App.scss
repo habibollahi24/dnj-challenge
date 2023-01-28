@@ -1,0 +1,9 @@
+@import "./variables";
+.app {
+   background-color: $primary;
+   p {
+      background-color: $secondary;
+      padding: 1rem;
+      margin: 5px;
+   }
+}

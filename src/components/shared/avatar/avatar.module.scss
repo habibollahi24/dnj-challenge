@@ -1,0 +1,22 @@
+.avatarContainer {
+   width: 50px;
+   height: 50px;
+   border-radius: 100%;
+   overflow: hidden;
+   margin-right: 10px;
+   flex-shrink: 0;
+   img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      display: inline-block;
+   }
+}
+.avatarText {
+   text-align: center;
+   padding-top: 25%;
+   background-color: rgb(158, 191, 228);
+   height: 100%;
+   color: rgb(21, 72, 212);
+   font-weight: bold;
+}

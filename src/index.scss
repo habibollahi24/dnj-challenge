@@ -1,0 +1,53 @@
+@font-face {
+   font-family: "pappins"; /*a name to be used later*/
+   src: url("./assets/fonts/Poppins-Medium.ttf"); /*URL to font*/
+   font-weight: 500;
+   font-style: 500;
+}
+@font-face {
+   font-family: "pappins"; /*a name to be used later*/
+   src: url("./assets/fonts/Poppins-Regular.ttf"); /*URL to font*/
+   font-weight: 400;
+   font-style: 400;
+}
+@font-face {
+   font-family: "pappins";
+   src: url("./assets/fonts/Poppins-Light.ttf");
+   font-weight: 300;
+   font-style: 300;
+}
+@font-face {
+   font-family: "pappins"; /*a name to be used later*/
+   src: url("./assets/fonts/poppins-v20-latin-100.ttf"); /*URL to font*/
+   font-weight: 100;
+   font-style: 100;
+}
+
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   font-family: pappins;
+}
+
+body {
+   background-color: #e2e2e2;
+}
+.container {
+   background-color: #f5f5f5;
+   max-width: 600px;
+   margin: 0 auto;
+}
+.input-field {
+   font-family: pappins;
+   border-radius: 3px;
+   border: 1px solid #ccc;
+   background-color: #f5f5f5;
+   padding: 0.5rem 1rem;
+   color: #333;
+   flex-grow: 1;
+   &:focus {
+      outline: none;
+      border: 2px solid rgb(133, 133, 133);
+   }
+}
