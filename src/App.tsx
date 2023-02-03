@@ -1,8 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import "./App.scss";
 import AddComment from "./components/add-comment/AddComment";
-import Comment from "./components/comments/Comments";
+import Comments from "./components/comments/Comments";
 import { IDiscussion } from "./model/model";
 import getCommentsApi from "./service/getCommentsApi";
 
@@ -38,7 +36,7 @@ function App() {
          <>
             {comments.map((comment: IDiscussion) => {
                return (
-                  <Comment
+                  <Comments
                      key={comment.id}
                      {...comment}
                      changeReply={changeReply}

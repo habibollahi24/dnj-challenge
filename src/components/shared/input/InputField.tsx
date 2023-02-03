@@ -4,9 +4,10 @@ interface InputProps {
    placeholder: string;
    value: string;
    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+   inputRef: React.RefObject<HTMLInputElement>;
 }
 
-const InputField = ({ placeholder, value, onChange }: InputProps) => {
+const InputField = ({ placeholder, value, onChange, inputRef }: InputProps) => {
    return (
       <input
          type="text"
@@ -14,6 +15,7 @@ const InputField = ({ placeholder, value, onChange }: InputProps) => {
          className="input-field"
          value={value}
          onChange={onChange}
+         ref={inputRef}
       />
    );
 };

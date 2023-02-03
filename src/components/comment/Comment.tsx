@@ -14,7 +14,7 @@ interface AditionalProps {
    setCommentID: React.Dispatch<React.SetStateAction<number | null>>;
    updatedLikes?: (v: IDiscussion[]) => void;
    parent: boolean;
-
+   handleFocus?: () => void;
    reply?: any;
 }
 
@@ -31,6 +31,7 @@ const Comment = (props: IDiscussion & AditionalProps) => {
       setCommentID,
       parent,
       reply,
+      handleFocus,
    } = props;
 
    const HandleShowAddComment = (id: number) => {
@@ -38,6 +39,9 @@ const Comment = (props: IDiscussion & AditionalProps) => {
       if (id === commentID) {
          setCommentID(null);
       }
+      setTimeout(() => {
+         handleFocus?.();
+      }, 1);
    };
 
    const handleFirstCommentLike = async (id: number) => {

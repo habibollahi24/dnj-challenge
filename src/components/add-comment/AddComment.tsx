@@ -19,7 +19,9 @@ const AddComment = ({ addFirstComment }: Props) => {
    const [textComment, setTextComment] = useState("");
    const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
+      if (textComment.trim().length === 0) {
+         return;
+      }
       const response = await addFirstCommentApi({
          id: Math.floor(Math.random() * 100000000),
          date: Date.now(),

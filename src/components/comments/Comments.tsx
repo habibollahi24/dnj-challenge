@@ -3,7 +3,7 @@ import style from "./comments.module.scss";
 
 import InputField from "../shared/input/InputField";
 import userImage from "../../assets/images/user.jpg";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { IDiscussion, IUser } from "../../model/model";
 
@@ -29,11 +29,23 @@ const Comments = (props: IDiscussion & ChangeReply) => {
 
    const [replyComment, setReplyComment] = useState("");
 
+   const inputRef = useRef<HTMLInputElement>(null);
+
+   const handleFocus = () => {
+      console.log(inputRef);
+      console.log("salam");
+      inputRef.current?.focus();
+   };
    const addreplyComment = async (
       e: React.FormEvent<HTMLFormElement>,
       id: number
    ) => {
       e.preventDefault();
+
+      if (replyComment.trim().length === 0) {
+         return;
+      }
+
       const response = await getCommentByIdApi(id);
 
       await updateCommentsApi(id, {
@@ -67,6 +79,7 @@ const Comments = (props: IDiscussion & ChangeReply) => {
             commentID={commentID}
             setCommentID={setCommentID}
             parent={true}
+            handleFocus={handleFocus}
          />
          {replies?.map((reply) => (
             <div key={reply.id} className={style.subComment}>
@@ -76,6 +89,7 @@ const Comments = (props: IDiscussion & ChangeReply) => {
                   commentID={commentID}
                   setCommentID={setCommentID}
                   parent={false}
+                  handleFocus={handleFocus}
                />
             </div>
          ))}
@@ -89,6 +103,7 @@ const Comments = (props: IDiscussion & ChangeReply) => {
                   placeholder="Reply"
                   value={replyComment}
                   onChange={(e) => setReplyComment(e.target.value)}
+                  inputRef={inputRef}
                />
             </form>
          )}
