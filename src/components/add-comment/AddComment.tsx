@@ -1,25 +1,26 @@
 import React, { useState } from "react";
-import Avatar from "../avatar/Avatar";
-import InputField from "../input/InputField";
-import style from "./addDiscussion.module.scss";
-import userImage from "../../../assets/images/user.jpg";
-import axios from "axios";
-import { IUser } from "../../../model/model";
+import Avatar from "../shared/avatar/Avatar";
+import InputField from "../shared/input/InputField";
+import style from "./addComment.module.scss";
+import userImage from "../../assets/images/user.jpg";
+import { IUser } from "../../model/model";
+import addFirstCommentApi from "../../service/addFirstCommentApi";
 
 const user: IUser = {
    name: "mohammad",
    avatar: userImage,
 };
 
-interface AddDiscussionProps {
-   sendComment: (c: any) => void;
+interface Props {
+   addFirstComment: (t: any) => void;
 }
 
-const AddDiscussion = ({ sendComment }: AddDiscussionProps) => {
+const AddComment = ({ addFirstComment }: Props) => {
    const [textComment, setTextComment] = useState("");
    const submitComment = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const response = await axios.post("http://localhost:8000/discussions", {
+
+      const response = await addFirstCommentApi({
          id: Math.floor(Math.random() * 100000000),
          date: Date.now(),
          user: { name: user.name, avatar: user.avatar },
@@ -28,7 +29,7 @@ const AddDiscussion = ({ sendComment }: AddDiscussionProps) => {
          iLikedIt: false,
          replies: [],
       });
-      sendComment(response.data);
+      addFirstComment(response.data);
       setTextComment("");
    };
    return (
@@ -45,4 +46,4 @@ const AddDiscussion = ({ sendComment }: AddDiscussionProps) => {
    );
 };
 
-export default AddDiscussion;
+export default AddComment;

@@ -11,5 +11,5 @@ export interface IComment {
  iLikedIt: boolean;
 }
 export interface IDiscussion extends IComment {
- replies: IComment[];
+ replies?: IComment[];
 }

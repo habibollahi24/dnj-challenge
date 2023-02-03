@@ -1,5 +1,5 @@
 {
-  "discussions": [
+  "comments": [
     {
       "id": 3,
       "date": 1672576574000,
@@ -56,7 +56,19 @@
       "text": "The first compaign went smoothly. Please make sure to see all attachments with the results to understand the flow.",
       "likes": 3,
       "iLikedIt": true,
-      "replies": []
+      "replies": [
+        {
+          "id": 78581763,
+          "date": 1675464391943,
+          "user": {
+            "name": "mohammad",
+            "avatar": "/src/assets/images/user.jpg"
+          },
+          "text": "chom",
+          "likes": 0,
+          "iLikedIt": false
+        }
+      ]
     },
     {
       "id": 1,
@@ -77,8 +89,32 @@
         "avatar": "/src/assets/images/user.jpg"
       },
       "text": "add comment",
+      "likes": 0,
+      "iLikedIt": false,
+      "replies": []
+    },
+    {
+      "id": 50770860,
+      "date": 1675459842695,
+      "user": {
+        "name": "mohammad",
+        "avatar": "/src/assets/images/user.jpg"
+      },
+      "text": "hi mamad",
       "likes": 1,
       "iLikedIt": true,
+      "replies": []
+    },
+    {
+      "id": 31708909,
+      "date": 1675462683757,
+      "user": {
+        "name": "mohammad",
+        "avatar": "/src/assets/images/user.jpg"
+      },
+      "text": "ali",
+      "likes": 0,
+      "iLikedIt": false,
       "replies": []
     }
   ]

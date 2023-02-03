@@ -1,10 +1,7 @@
-.commentBox {
-   padding: 1rem;
-   border-bottom: 1px solid #e7e7e7;
-}
 .comment {
    display: flex;
 }
+
 .commentBody {
    flex-grow: 1;
    h2 {
@@ -18,26 +15,6 @@
       margin: 8px 0;
       font-weight: 500;
    }
-}
-.reply {
-   color: rgb(23, 94, 175);
-   font-weight: 600;
-   background-color: transparent;
-   border: none;
-   cursor: pointer;
-}
-.subComment {
-   padding-left: 50px;
-   padding-top: 20px;
-   margin-left: 25px;
-   border-left: 1px solid #ccc;
-}
-.subReply {
-   padding-left: 50px;
-   padding-top: 20px;
-   margin-left: 25px;
-   border-left: 1px solid #ccc;
-   display: flex;
 }
 .date {
    font-size: 0.8rem;

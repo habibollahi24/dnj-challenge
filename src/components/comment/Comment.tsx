@@ -1,102 +1,61 @@
 import Avatar from "../shared/avatar/Avatar";
-import style from "./comment.module.scss";
-import { HiThumbUp } from "react-icons/hi";
 import Button from "../shared/button/Button";
-import InputField from "./../shared/input/InputField";
-import userImage from "../../assets/images/user.jpg";
+import { HiThumbUp } from "react-icons/hi";
+import style from "./comment.module.scss";
+import { timeDifference } from "../helper/formatDate";
 import { useState } from "react";
-import { timeDifference } from "./../helper/formatDate";
-import axios from "axios";
-import { IDiscussion, IUser } from "../../model/model";
+import getCommentByIdApi from "./../../service/getCommentByIdApi";
+import updateCommentsApi from "./../../service/updateCommentsApi";
+import getCommentsApi from "./../../service/getCommentsApi";
+import { IDiscussion } from "../../model/model";
 
-const masterUser: IUser = {
-   name: "mohammad",
-   avatar: userImage,
-};
+interface AditionalProps {
+   commentID: number | null;
+   setCommentID: React.Dispatch<React.SetStateAction<number | null>>;
+   updatedLikes?: (v: IDiscussion[]) => void;
+   parent: boolean;
 
-interface ChangeReply {
-   changeReply: (v: IDiscussion[]) => void;
-   updatedLikes: (v: IDiscussion[]) => void;
+   reply?: any;
 }
 
-const Comment = (props: IDiscussion & ChangeReply) => {
+const Comment = (props: IDiscussion & AditionalProps) => {
    const {
       text,
       date,
       user,
       likes,
-      replies,
       id,
       iLikedIt,
-      changeReply,
       updatedLikes,
+      commentID,
+      setCommentID,
+      parent,
+      reply,
    } = props;
-   const [commentID, setCommentID] = useState<null | number>(null);
 
-   const [replyComment, setReplyComment] = useState("");
-
-   const HandleReply = (id: number) => {
+   const HandleShowAddComment = (id: number) => {
       setCommentID(id);
       if (id === commentID) {
          setCommentID(null);
       }
    };
 
-   const handleReplyComment = async (
-      e: React.FormEvent<HTMLFormElement>,
-      id: number
-   ) => {
-      e.preventDefault();
-      const response = await axios.get(
-         `http://localhost:8000/discussions/${id}`
-      );
+   const handleFirstCommentLike = async (id: number) => {
+      const response = await getCommentByIdApi(id);
 
-      const res = await axios.put(`http://localhost:8000/discussions/${id}`, {
-         ...response.data,
-         replies: [
-            ...response.data.replies,
-            {
-               id: Math.floor(Math.random() * 100000000),
-               date: Date.now(),
-               user: {
-                  name: masterUser.name,
-                  avatar: masterUser.avatar,
-               },
-               text: replyComment,
-               likes: 0,
-               iLikedIt: false,
-            },
-         ],
-      });
-      const getUpdatedData = await axios.get(
-         `http://localhost:8000/discussions/`
-      );
-
-      changeReply(getUpdatedData.data);
-      setReplyComment("");
-   };
-
-   const handleLike = async (id: number) => {
-      const response = await axios.get(
-         `http://localhost:8000/discussions/${id}`
-      );
-
-      const res = await axios.put(`http://localhost:8000/discussions/${id}`, {
+      await updateCommentsApi(id, {
          ...response.data,
          iLikedIt: response.data.iLikedIt ? false : true,
          likes: response.data.iLikedIt
             ? response.data.likes - 1
             : response.data.likes + 1,
       });
-      const responseUpdated = await axios.get(
-         `http://localhost:8000/discussions/`
-      );
-      updatedLikes(responseUpdated.data);
+      const responseUpdated = await getCommentsApi();
+      updatedLikes && updatedLikes(responseUpdated.data);
    };
-   const handleReplyLike = async (id: number, replyId: number) => {
-      const response = await axios.get(
-         `http://localhost:8000/discussions/${id}`
-      );
+
+   const handleReplyCommentLike = async (id: number, replyId?: number) => {
+      const response = await getCommentByIdApi(id);
 
       const mapped = response.data.replies.map((item: any) => {
          if (item.id === replyId) {
@@ -110,18 +69,16 @@ const Comment = (props: IDiscussion & ChangeReply) => {
          }
       });
 
-      const res = await axios.put(`http://localhost:8000/discussions/${id}`, {
+      await updateCommentsApi(id, {
          ...response.data,
          replies: mapped,
       });
-      const responseUpdated = await axios.get(
-         `http://localhost:8000/discussions/`
-      );
-      updatedLikes(responseUpdated.data);
+      const responseUpdated = await getCommentsApi();
+      updatedLikes && updatedLikes(responseUpdated.data);
    };
 
-   return (
-      <div className={style.commentBox}>
+   if (parent) {
+      return (
          <div className={style.comment}>
             <Avatar src={user.avatar || ""} alt={user.name} />
             <div className={style.commentBody}>
@@ -130,56 +87,48 @@ const Comment = (props: IDiscussion & ChangeReply) => {
                   {timeDifference(new Date(), date)}
                </span>
                <p>{text}</p>
+
                <Button
                   className="like"
-                  onClick={() => handleLike(id)}
+                  onClick={() => handleFirstCommentLike(id)}
                   iLikedIt={iLikedIt}
                >
                   <HiThumbUp />
                   {likes}
                </Button>
-               <Button onClick={() => HandleReply(id)} className="reply">
+
+               <Button
+                  onClick={() => HandleShowAddComment(id)}
+                  className="reply"
+               >
                   Reply
                </Button>
             </div>
          </div>
-         {replies?.map((reply) => (
-            <div key={reply.id} className={style.subComment}>
-               <div className={style.comment}>
-                  <Avatar src={reply.user.avatar || ""} alt={reply.user.name} />
-                  <div className={style.commentBody}>
-                     <h2>{reply.user.name}</h2>
-                     <span className={style.date}>
-                        {timeDifference(new Date(), reply.date)}
-                     </span>
-                     <p>{reply.text}</p>
-                     <Button
-                        className="like"
-                        onClick={() => handleReplyLike(id, reply.id)}
-                        iLikedIt={reply.iLikedIt}
-                     >
-                        <HiThumbUp />
-                        {reply.likes}
-                     </Button>
-                  </div>
-               </div>
+      );
+   } else {
+      return (
+         <div className={style.comment}>
+            <Avatar src={reply.user.avatar || ""} alt={reply.user.name} />
+            <div className={style.commentBody}>
+               <h2>{reply.user.name}</h2>
+               <span className={style.date}>
+                  {timeDifference(new Date(), reply.date)}
+               </span>
+               <p>{reply.text}</p>
+
+               <Button
+                  className="like"
+                  onClick={() => handleReplyCommentLike(id, reply.id)}
+                  iLikedIt={reply.iLikedIt}
+               >
+                  <HiThumbUp />
+                  {reply.likes}
+               </Button>
             </div>
-         ))}
-         {id === commentID && (
-            <form
-               onSubmit={(e) => handleReplyComment(e, id)}
-               className={style.subReply}
-            >
-               <Avatar src={masterUser.avatar || ""} alt={user.name} />
-               <InputField
-                  placeholder="Reply"
-                  value={replyComment}
-                  onChange={(e) => setReplyComment(e.target.value)}
-               />
-            </form>
-         )}
-      </div>
-   );
+         </div>
+      );
+   }
 };
 
 export default Comment;

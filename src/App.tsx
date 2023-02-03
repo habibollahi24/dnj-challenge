@@ -1,23 +1,24 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import "./App.scss";
-import AddDiscussion from "./components/shared/add-discussion/AddDiscussion";
-import Comment from "./components/comment/Comment";
+import AddComment from "./components/add-comment/AddComment";
+import Comment from "./components/comments/Comments";
 import { IDiscussion } from "./model/model";
+import getCommentsApi from "./service/getCommentsApi";
 
 function App() {
    const [comments, setComments] = useState<IDiscussion[]>([]);
 
    useEffect(() => {
-      const getComments = async () => {
-         const response = await axios.get("http://localhost:8000/discussions");
+      const getAllComments = async () => {
+         const response = await getCommentsApi();
 
          setComments(response.data.sort((x: any, y: any) => y.date - x.date));
       };
-      getComments();
+      getAllComments();
    }, []);
 
-   const sendComment = (data: IDiscussion) => {
+   const addFirstComment = (data: IDiscussion) => {
       setComments(
          [...comments, data].sort((x: any, y: any) => y.date - x.date)
       );
@@ -33,7 +34,7 @@ function App() {
 
    return (
       <div className="container">
-         <AddDiscussion sendComment={sendComment} />
+         <AddComment addFirstComment={addFirstComment} />
          <>
             {comments.map((comment: IDiscussion) => {
                return (
