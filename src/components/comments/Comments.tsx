@@ -32,8 +32,6 @@ const Comments = (props: IDiscussion & ChangeReply) => {
    const inputRef = useRef<HTMLInputElement>(null);
 
    const handleFocus = () => {
-      console.log(inputRef);
-      console.log("salam");
       inputRef.current?.focus();
    };
    const addreplyComment = async (
